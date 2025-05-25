@@ -1,0 +1,85 @@
+import Link from "next/link"
+import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { Bed, Bath, Square, ChevronLeft, ChevronRight } from "lucide-react"
+import { getAllProperties } from "@/lib/properties"
+
+export default function PropertyGrid() {
+  const properties = getAllProperties()
+
+  return (
+    <section className="py-20 bg-background">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Discover a World of Possibilities</h2>
+          <p className="text-muted-foreground max-w-3xl">
+            Our portfolio of properties is as diverse as your dreams. Explore the following categories to find the
+            perfect property that resonates with your vision of home
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {properties.map((property) => (
+            <div
+              key={property.id}
+              className="bg-card rounded-lg overflow-hidden border border-border hover:border-purple-500 transition-colors"
+            >
+              <div className="relative">
+                <Image
+                  src={property.image || "/placeholder.svg"}
+                  alt={property.title}
+                  width={400}
+                  height={300}
+                  className="w-full h-48 object-cover"
+                />
+              </div>
+
+              <div className="p-6">
+                <div className="text-sm text-purple-600 dark:text-purple-400 mb-2">{property.location}</div>
+                <h3 className="text-xl font-semibold text-foreground mb-2">{property.title}</h3>
+                <p className="text-muted-foreground text-sm mb-4">{property.description}</p>
+
+                <div className="flex items-center space-x-4 mb-4 text-sm text-muted-foreground">
+                  <div className="flex items-center space-x-1">
+                    <Bed className="h-4 w-4" />
+                    <span>{property.specifications.bedrooms}-Bedroom</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <Bath className="h-4 w-4" />
+                    <span>{property.specifications.bathrooms}-Bathroom</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <Square className="h-4 w-4" />
+                    <span>{property.type}</span>
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="text-sm text-muted-foreground">Price</div>
+                    <div className="text-2xl font-bold text-foreground">{property.price}</div>
+                  </div>
+                  <Button asChild className="bg-purple-600 hover:bg-purple-700 text-white">
+                    <Link href={`/properties/${property.id}`}>View Property Details</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex justify-center items-center mt-8 space-x-4">
+          <span className="text-muted-foreground">01 of 60</span>
+          <div className="flex space-x-2">
+            <button className="p-2 border border-border rounded-lg text-muted-foreground hover:text-foreground hover:border-purple-500">
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <button className="p-2 border border-border rounded-lg text-muted-foreground hover:text-foreground hover:border-purple-500">
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
